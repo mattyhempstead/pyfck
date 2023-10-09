@@ -68,9 +68,9 @@ So far we have used 7 characters `exc()%'`, and the goal is to get access to all
 
 Previous methods achived this with 2 extra characters:
  - `1` and `+`, which allows you to chain addition to reach any integer `1+1+1+...` (`1%1` can be used for `0`). [Source](https://codegolf.stackexchange.com/a/110677).
- - `=` and `+`, which allows you to chain addition, where `1` is achived via truthiness (`''==''`). This method lets you avoid exponential encoding growth. [Source](https://github.com/Samdaaman/pyfuck).
+ - `=` and `+`, which allows you to chain addition, where `1` is achieved via truthiness (`''==''`). This method lets you avoid exponential encoding growth. [Source](https://github.com/Samdaaman/pyfuck).
 
-pyfck method manages to get all integers using only a single extra character (`=`).
+The pyfck method manages to get all integers using only a single extra character (`=`).
 
 
 ### 0 and 1
