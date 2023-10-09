@@ -17,8 +17,8 @@ This would inevitably inspire the repo [pyfuck](https://github.com/wanqizhu/pyfu
 In 2022, a [fork of pyfuck](https://github.com/Samdaaman/pyfuck) reduced the python3 limit down to just 9 characters (`exc'=()%+`).
 
 Technically, the pyfuck fork was inspired by a [stackexchange post](https://codegolf.stackexchange.com/a/110677) from early 2017 (before the original pyfuck repo)
-that outlined how to write python3 using the same 9 characters, so really the first person to hit 9 was some random stackoverflow codegolfer.
-However, their method grows expoentially with the number of characters in the encoding program, so the 2022 fork is arguably an improvement.
+that outlined how to write python3 using the same 9 characters, so really the first person to hit 9 was probably some random stackoverflow codegolfer.
+However, their method grows expoentially with the number of characters in the encoding program, so the 2022 fork (which grows linearly) is arguably an improvement.
 
 Now in 2023, for some reason I wasted half a day and managed to to remove one more chracter from the 9 character python3 pyfuck limit.
 Introducing pyfck!
@@ -146,7 +146,7 @@ exec('x=11') == exec('print(x)') == exec('x=22') == exec('print(x)')
 The more attentive of you may have noticed my desire for `b` was actually because I was trying to use Python's binary syntax that lets you express any integer using only `0`, `1` and `b`.
 For example, we can express the integer `2` in python using `0b10`.
 
-If we place `exec('x=11')` to the left, we can now abuse string formatting techniques to assign variables to arbitrary digits.
+If we place `exec('x=11')` to the left, we can now abuse string formatting techniques and assign variables to arbitrary digits.
 ```python3
 exec('x=11') == exec('xx=%x%%x%%%%x%%%%%%%%x' % (''==()) % x % (''=='') % (''==()))
 -> x=11; exec('xx=%x%%x%%%%x%%%%%%%%x' % (''==()) % x % (''=='') % (''==()))
@@ -188,7 +188,7 @@ we construct variable names by replacing `0` with `c` and `1` with `e` in its bi
 
 Our final `exec` statement can then use the variables `eecccee`, `eeeccc`, `eeeece` to construct and execute the string `c=8`.
 
-```
+```python3
 exec('%c%%c%%%%c' % eecccee % eeeece % eeeccc)
 -> exec('%c%%c%%%%c' % 99 % 61 % 56)
 -> exec('c%c%%c' % 61 % 56)
@@ -229,29 +229,47 @@ exec('x=%x%%x'%(''=='')%(''==''))==exec('eceecc=%x%%x%%%%x%%%%%%%%x%%%%%%%%%%%%%
 
 
 
+# Future Work
+
+
+## Program Size
+
+The current version of `pyfck` grows exponentially with the input program.
+
+If anyone can figure out how to reduce the asymptotic growth rate to below $O(2^n)$ I think that would be an objective improvement.
+
+A couple potential non-asymptotic ways to reduce program size could be:
+ - Using the first 2 `exec` statements to assigns variables `xe` and `xc` to `True` and `False`. Then your formatting chains will looks like `...%xe%xc%xc%...` instead of `...%(''==())%(''==())%(''==())%...`.
+ - Using early `exec`s to assign variables to a large number of `%`'s. Then somehow substitute these strings as needed.
+
+
+One potential asympotic method is to run an `exec` before the final program `exec` which defines a variable/function that can be used to avoid the long format string (`%c%%c%%%%c...`) for the program.
+Maybe sometimes that helps you construct that format string, or avoid it entirely using tuples?
 
 
 
+## Character Set
 
+I honestly have no idea how you would go about getting to 7 characters without major technique changes.
 
+If you can get access to an integer like `1` and remove 2 other characters, you *might* be able use modulus (`%`) and the `e` operator to get all relevant ascii integers.
+Some interesting results I found earlier:
+```
+0 = 1%1
+1 = 1
+2.0 = 1e111 % 111 % 11
+3.0 = 1e111 % 1e11 % 11
+4.0 = 1e111 % 1e11 % 1111 % 1e1
+5.0 = 1e111 % 1111 % 111
+6.0 = 1e111 % 111 % (1e111 % 1e11 % 111)
+7.0 = 1e111 % 1e11 % 111 % 11
+8.0 = 1e111 % 1e11 % 111 % 1e1
+9.0 = 1e111 % 11111 % 11
+10.0 = 1e1
+...
+```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Many of these are floats unfortunately, so you would need to figure out how to cast to int also...
 
 
 
