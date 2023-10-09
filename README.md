@@ -244,7 +244,7 @@ A couple potential non-asymptotic ways to reduce program size could be:
 
 
 One potential asympotic method is to run an `exec` before the final program `exec` which defines a variable/function that can be used to avoid the long format string (`%c%%c%%%%c...`) for the program.
-Maybe sometimes that helps you construct that format string, or avoid it entirely using tuples?
+Maybe a lambda that helps you construct that format string, or avoid it entirely using tuples?
 
 
 
