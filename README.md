@@ -240,7 +240,7 @@ If anyone can figure out how to reduce the asymptotic growth rate to below $O(2^
 
 A couple potential non-asymptotic ways to reduce program size could be:
  - Using the first 2 `exec` statements to assigns variables `xe` and `xc` to `True` and `False`. Then your formatting chains will looks like `...%xe%xc%xc%...` instead of `...%(''==())%(''==())%(''==())%...`.
- - Using early `exec`s to assign variables to a large number of `%`'s. Then somehow substitute these strings as needed.
+ - Using early `exec`s to assign variables to a large number of `%`'s. Then substitute these strings as needed, perhaps by getting access to `s` (`'%c' % 115`) and using `%s` string substitution.
 
 
 One potential asympotic method is to run an `exec` before the final program `exec` which defines a variable/function that can be used to avoid the long format string (`%c%%c%%%%c...`) for the program.
