@@ -18,9 +18,9 @@ In 2022, a [fork of pyfuck](https://github.com/Samdaaman/pyfuck) reduced the pyt
 
 Technically, the pyfuck fork was inspired by a [stackexchange post](https://codegolf.stackexchange.com/a/110677) from early 2017 (before the original pyfuck repo)
 that outlined how to write python3 using the same 9 characters, so really the first person to hit 9 was probably some random stackoverflow codegolfer.
-However, their method grows expoentially with the number of characters in the encoding program, so the 2022 fork (which grows linearly) is arguably an improvement.
+However, their method grows exponentially with the number of characters in the encoding program, so the 2022 fork (which grows linearly) is arguably an improvement.
 
-Now in 2023, for some reason I wasted half a day and managed to to remove one more chracter from the 9 character python3 pyfuck limit.
+Now in 2023, for some reason I wasted half a day and managed to to remove one more character from the 9 character python3 pyfuck limit.
 Introducing pyfck!
 Valid python3 code using only 8 characters (`exc'%=()`).
 
@@ -50,7 +50,7 @@ Since `%%` will format to the `%` literal, we can actually remove the need for e
 
 This works because the string is passed through multiple formatting executions. The first will convert the `%c` to `h`, and the `%%` to `%`, giving the string `h%c`. The second will then replace with `%c` with `i`, giving `hi`.
 
-Unfortunately, by removing that additional character our encoding method grows expoentially with the number characters in the target string, but I suppose this is just the price we pay for saving a single byte.
+Unfortunately, by removing that additional character our encoding method grows exponentially with the number characters in the target string, but I suppose this is just the price we pay for saving a single byte.
 
 The string "hi fren!" now looks something like this and has over 250 characters.
 ``` python3
@@ -60,13 +60,13 @@ The string "hi fren!" now looks something like this and has over 250 characters.
 
 
 
-## Getting numbers from the devil
+## Getting numbers from hell
 
 Now comes the tricky part (yes, strings from numbers was child's play).
 
 So far we have used 7 characters `exc()%'`, and the goal is to get access to all integers in as few extra characters as possible.
 
-Previous methods achived this with 2 extra characters:
+Previous methods achieved this with 2 extra characters:
  - `1` and `+`, which allows you to chain addition to reach any integer `1+1+1+...` (`1%1` can be used for `0`). [Source](https://codegolf.stackexchange.com/a/110677).
  - `=` and `+`, which allows you to chain addition, where `1` is achieved via truthiness (`''==''`). This method lets you avoid exponential encoding growth. [Source](https://github.com/Samdaaman/pyfuck).
 
@@ -243,7 +243,7 @@ A couple potential non-asymptotic ways to reduce program size could be:
  - Using early `exec`s to assign variables to a large number of `%`'s. Then substitute these strings as needed, perhaps by getting access to `s` (`'%c' % 115`) and using `%s` string substitution.
 
 
-One potential asympotic method is to run an `exec` before the final program `exec` which defines a variable/function that can be used to avoid the long format string (`%c%%c%%%%c...`) for the program.
+One potential asymptotic method is to run an `exec` before the final program `exec` which defines a variable/function that can be used to avoid the long format string (`%c%%c%%%%c...`) for the program.
 Maybe a lambda that helps you construct that format string, or avoid it entirely using tuples?
 
 
@@ -271,6 +271,8 @@ Some interesting results I found earlier:
 
 Many of these are floats unfortunately, so you would need to figure out how to cast to int also...
 
+
+At this point I think the easiest way to lose another character is to wait for future Python version and pray.
 
 
 
