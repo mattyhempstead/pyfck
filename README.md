@@ -99,7 +99,7 @@ We now put all our efforts into reaching the string `'b'`.
 Fortunately, hexadecimal string formatting is capable of producing exactly 6 letters, one of which is `b`.
 In fact, `b` is the hexadecimal encoding of 11, which is itself made of only 1's!
 
-This means the python expression `'%x' % 11 = 'b'` will evaluate to the string `'b'`.
+This means the python expression `'%x' % 11` will evaluate to the string `'b'`.
 
 Using the string formatting method outlined before, we can get the string `'11'` like so:
 ```python3
