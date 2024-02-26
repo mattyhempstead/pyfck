@@ -1,4 +1,4 @@
-# pyfck - valid python using only 8 characters: `exc'%=()`
+# pyfck - python using only 8 characters: `exc'%=()`
 
 This repo outlines a method of encoding any python script using only the following 8 characters:
 
