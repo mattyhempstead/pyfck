@@ -126,8 +126,12 @@ def encode_program(program: str, linear_asymptotic: bool = False) -> str:
     for c in sorted(chars):# + linear_asymptotic*set(encoded_linear_asymptotic_program):
         statements.append(encode_digit_assignment(ord(c)))
 
+
+    # Note the below statements using xx can probably be reduced in size
+    # by substituting the characters we already have access to (e.g. xx=)
+    # with their actual characters rather than re-encoding them.
+
     # Execute xx=''
-    # This could probably be run directly given we have the chars, but we won't generality
     statements.append(encode_str(linear_asymptotic_init))
 
     # Execute xx+=chr(n) for all characters c where n=ord(c)
