@@ -8,6 +8,8 @@
     This can be addressed by just wrapping like exec(bytes(X)) where X is the program
     encoded with bytes defined as integers, however this already makes the program too
     large for feasible execution after literally a few characters.
+
+    e.g. The program "exec(bytes([112,114,105,110,116,40,39,37,39,41]))" would equal 'print("%")'
 """
 
 
