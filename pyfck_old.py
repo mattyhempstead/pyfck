@@ -1,4 +1,15 @@
-## pyfck
+"""
+    An old implementation of pyfck.
+
+    Grows exponentially (O(2^n)) with the number of characters,
+    so it can't feasibly execute programs much larger than 20 chars.
+
+    Also does not handle programs containing a % symbol.
+    This can be addressed by just wrapping like exec(bytes(X)) where X is the program
+    encoded with bytes defined as integers, however this already makes the program too
+    large for feasible execution after literally a few characters.
+"""
+
 
 CHARSET = ['e', 'x', 'c', '%', '(', ')', "'", '=']
 
@@ -6,13 +17,12 @@ CHARSET = ['e', 'x', 'c', '%', '(', ')', "'", '=']
 encoded_True = "(''=='')"
 encoded_False = "(''==())"
 
-# The program "x=11"
-encoded_x_equals_11 = f"'x=%x%%x'%{encoded_True}%{encoded_True}"
+# encoded_0_str = f"('%x'%{encoded_True})"
+# encoded_1_str = f"('%x'%{encoded_True})"
 
-# Executable statements to help produce O(n) program sizes
-linear_asymptotic_init = "xx=''"
-linear_asymptotic_append = "xx+=chr(%d)"
-linear_asymptotic_exec = "xx"
+# the program "x=11"
+encoded_x_equals_11: str = f"'x=%x%%x'%{encoded_True}%{encoded_True}"
+
 
 
 def encode_format_str(char:str, length:int):
@@ -20,8 +30,8 @@ def encode_format_str(char:str, length:int):
         Construct "%c%%c%%%%c..." style string for formatting.
         `char` can be "x" or "c" or anything else valid in python3.
 
-        Note the number of % must double for every additional character.
-        So we shouldn't use this to encode the entire program string all at once.
+        Unfortunatley the number of % must double for every additional character.
+        If someone can come up with a format method that is <O(2^n) (O(n)??) that would be great.
     """
     format_str = ""
     for i in range(length):
@@ -78,21 +88,17 @@ def encode_digit_assignment(n: int) -> str:
 def encode_str(s: str) -> str:
     """
         Encodes an arbitrary string with the charset.
-        Uses the exponentially growing string %c%%c%%%%c... method.
 
         Assumes that all required ascii integers are assigned to variables
         using the naming convention outlined in encode_digit_var().
-
-        Optionally will apply the linear_asymptotic trick which assumes
-        xx(a,b)->(a+b) is defined to allow appending of strings.
     """
     # print(s)
 
-    encoded_vars = [encode_digit_var(ord(c)) for c in list(s)]
-    # print(encoded_vars)
-
     encoded_format_str = encode_format_str('c', len(s))
     # print(encoded_format_str)
+
+    encoded_vars = [encode_digit_var(ord(c)) for c in list(s)]
+    # print(encoded_vars)
 
     encoded_str = f"'{encoded_format_str}'%" + "%".join(encoded_vars)
     # print(encoded_str)
@@ -101,67 +107,46 @@ def encode_str(s: str) -> str:
 
 
 
-def encode_program(program: str, linear_asymptotic: bool = False) -> str:
+def encode_program(program: str) -> str:
     """
         Returns entire program encoded using charset.
 
         The string returned here can be executed directly by pasting in a python interpreter.
     """
-    # Don't use the linear asymptotic trick if it won't help
-    # linear_asymptotic &= len(program) >= len(encoded_linear_asymptotic_program)
 
     statements = []
 
     # Need this first to assign x=11 (gives us access to 'b' char)
     statements.append(encoded_x_equals_11)
 
-
-    # Generate a list of statements which assign all unique characters we need to variables
-    chars = set(program)
-    chars |= set(linear_asymptotic_init)
-
-    for c in program:
-        chars |= set(linear_asymptotic_append % ord(c))
-
-    for c in sorted(chars):# + linear_asymptotic*set(encoded_linear_asymptotic_program):
+    # Assign all unique characters in program to variables
+    for c in set(program):
         statements.append(encode_digit_assignment(ord(c)))
 
-    # Execute xx=''
-    # This could probably be run directly given we have the chars, but we won't generality
-    statements.append(encode_str(linear_asymptotic_init))
-
-    # Execute xx+=chr(n) for all characters c where n=ord(c)
-    # e.g. xx+=chr(100) will append 'd' to xx
-    for c in program:
-        statements.append(encode_str(linear_asymptotic_append % ord(c)))
-
-    # Execute xx, which should be a string containing the original program
-    statements.append(linear_asymptotic_exec)
-
     # Encoded program itself
-    # statements.append(encode_str(program))
+    statements.append(encode_str(program))
 
     # for s in statements:
     #     print(s)
     # print(statements)
 
+
     encoded_program = "==".join(f"exec({s})" for s in statements)
     # print(encoded_program)
+
+    # print(set(encoded_program))
 
     return encoded_program
 
 
+# print(encoded_x_equals_11)
 
-if __name__ == '__main__':
+# encode_digit_assignment(12)
 
-    # program = "c=8"
-    # program = 'print("Hello World!")'
-    program = "x=5\nprint(x)"
+# encode_str("print(0)")
+# encode_str("a=2")
 
-    encoded_program = encode_program(program)
+# encode_program("a=2")
+# encode_program("x=0\nprint(x)")
 
-    print(encoded_program)
 
-    print(set(encoded_program))
-
-    print(len(program), len(encoded_program))
